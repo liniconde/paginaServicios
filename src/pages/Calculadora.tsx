@@ -74,7 +74,7 @@ export const Calculadora: React.FC<CalculadoraProps> = ({
       <div>
         <button
           className="px-9 py-3 bg-gray-300 text-black font-bold rounded-md hover:bg-gray-400 transition"
-          onClick={() => navigate("/ Calculadora")}
+          onClick={() => navigate("/")}
         >
           INICIO
         </button>
@@ -108,8 +108,10 @@ export const Calculadora: React.FC<CalculadoraProps> = ({
             sumarPresupuesto={sumarValorPresupuesto}
             presupuesto={presupuesto}
             setPresupuesto={setPresupuesto}
-            onCheckboxChange={() => {}}
             isPagoAnual={isPagoAnual}
+            onCheckboxChange={(checked) =>
+              handleCheckboxChange(data.id, checked)
+            }
           />
         ))}
       </div>
