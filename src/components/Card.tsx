@@ -12,6 +12,7 @@ interface CardProps {
   setPresupuesto: React.Dispatch<React.SetStateAction<Presupuesto>>;
   sumarPresupuesto: (valorASumar: number) => void;
   onCheckboxChange: (checked: boolean) => void;
+  isPagoAnual: boolean;
 }
 
 export const Card: React.FC<CardProps> = ({
@@ -24,6 +25,7 @@ export const Card: React.FC<CardProps> = ({
   onCheckboxChange,
   presupuesto,
   setPresupuesto,
+  isPagoAnual,
 }) => {
   return (
     <div className="border-2 py-5 px-9 shadow-xl rounded-xl overflow-auto">
@@ -33,10 +35,20 @@ export const Card: React.FC<CardProps> = ({
           <h1 className="text-xl font-bold mb-2">{title}</h1>
           <p className="text-sm font-bold text-black-600">{description}</p>
         </div>
-        {/*Precio */}
+
+        {/* Precio con texto de descuento */}
         <div className="text-2xl font-bold text-gray-900">
-          {price}
-          <span className="text-sm font-normal">€</span>
+          {isPagoAnual && (
+            <p className="text-sm justify-center text-orange-500 mb-1">
+              ¡Descuento del 20%!
+            </p>
+          )}
+
+          {/*Precio */}
+          <div className="text-2xl font-bold text-gray-900">
+            {price}
+            <span className="text-sm font-normal">€</span>
+          </div>
         </div>
         {/*Checkbox */}
         <div className="flex items-center">

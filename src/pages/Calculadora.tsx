@@ -108,9 +108,8 @@ export const Calculadora: React.FC<CalculadoraProps> = ({
             sumarPresupuesto={sumarValorPresupuesto}
             presupuesto={presupuesto}
             setPresupuesto={setPresupuesto}
-            onCheckboxChange={(checked) =>
-              handleCheckboxChange(data.id, checked)
-            }
+            onCheckboxChange={() => {}}
+            isPagoAnual={isPagoAnual}
           />
         ))}
       </div>
