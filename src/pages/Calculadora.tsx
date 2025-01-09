@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card } from "./../components/Card";
 import { cardData } from "./../data/data";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Solicitud } from "../components/Solicitud";
 import { CardsEnum, Presupuesto } from "../interfaces/interfaces";
 
@@ -14,24 +14,53 @@ export const Calculadora: React.FC<CalculadoraProps> = ({
   listadoPresupuesto,
   setlistadoPresupuesto,
 }) => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+
+  const initialParams = new URLSearchParams(location.search);
   const [presupuesto, setPresupuesto] = useState<Presupuesto>({
     nombre: "",
     telefono: "",
     email: "",
     precioTotal: 0,
     fecha: new Date(),
-    [CardsEnum.Seo]: false,
-    [CardsEnum.Ads]: false,
-    [CardsEnum.Web]: false,
-    numeroDePaginas: 0,
-    numeroDeIdiomas: 0,
+    [CardsEnum.Seo]: initialParams.get("seo") === "true" || false,
+    [CardsEnum.Ads]: initialParams.get("ads") === "true" || false,
+    [CardsEnum.Web]: initialParams.get("web") === "true" || false,
+    numeroDePaginas: parseInt(initialParams.get("pages") || "0", 10) || 0,
+    numeroDeIdiomas: parseInt(initialParams.get("languages") || "0", 10) || 0,
   });
 
-  const [isPagoAnual, setIsPagoAnual] = useState<boolean>(false); // Estado del toggle
-  const navigate = useNavigate(); // Estado centralizado para manejar las selecciones de las casillas
+  useEffect(() => {
+    const parametros = new URLSearchParams(location.search);
+    console.log("parametrosss", location.pathname, parametros);
+    if (location.pathname === "calculadora") {
+      setPresupuesto((prev) => ({
+        ...prev,
+        [CardsEnum.Seo]: parametros.get("seo") === "true",
+        [CardsEnum.Ads]: parametros.get("ads") === "true",
+        [CardsEnum.Web]: parametros.get("web") === "true",
+        numeroDePaginas: parseInt(parametros.get("pages") || "0", 10),
+        numeroDeIdiomas: parseInt(parametros.get("languages") || "0", 10),
+      }));
+    }
+  }, [location.pathname, location.search]);
 
-  //const [valorPresupuesto, setValorPresupuesto] = useState<number>(0);
-  // Función para actualizar el estado de los checkboxes
+  useEffect(() => {
+    const parametros = new URLSearchParams();
+    parametros.set("seo", String(presupuesto[CardsEnum.Seo]));
+    parametros.set("ads", String(presupuesto[CardsEnum.Ads]));
+    parametros.set("web", String(presupuesto[CardsEnum.Web]));
+    parametros.set("pages", String(presupuesto.numeroDePaginas));
+    parametros.set("languages", String(presupuesto.numeroDeIdiomas));
+    if (!isSubmitting) {
+      navigate(`?${parametros.toString()}`, { replace: true });
+    }
+  }, [presupuesto, isSubmitting]);
+
+  const [isPagoAnual, setIsPagoAnual] = useState<boolean>(false); 
+
   const handleCheckboxChange = (id: string, checked: boolean) => {
     setPresupuesto({ ...presupuesto, [id]: checked });
     calcularValorPresupuesto(id, checked);
@@ -54,12 +83,13 @@ export const Calculadora: React.FC<CalculadoraProps> = ({
   };
 
   const calcularDescuento = (precio: number) => {
-    return isPagoAnual ? precio * 0.8 : precio; // 20% de descuento en pago anual
+    return isPagoAnual ? precio * 0.8 : precio; 
   };
 
   const agregarPresupuesto = (nuevoPresupuesto: Presupuesto) => {
     setlistadoPresupuesto([...listadoPresupuesto, nuevoPresupuesto]);
     navigate("/listado-presupuesto");
+    setIsSubmitting(true);
   };
 
   return (
@@ -79,8 +109,7 @@ export const Calculadora: React.FC<CalculadoraProps> = ({
           INICIO
         </button>
       </div>
-
-      {/* Toggle Pago Mensual/Anual */}
+      
       <div className="flex items-center justify-center my-6 gap-4">
         <span className="font-bold text-lg">Pago mensual</span>
         <label className="relative inline-flex items-center cursor-pointer">

@@ -30,13 +30,11 @@ export const Card: React.FC<CardProps> = ({
   return (
     <div className="border-2 py-5 px-9 shadow-xl rounded-xl overflow-auto">
       <div className="grid grid-cols-3 items-center place-items-center">
-        {/*Título y Descripción */}
         <div className="flex flex-col text-start">
           <h1 className="text-xl font-bold mb-2">{title}</h1>
           <p className="text-sm font-bold text-black-600">{description}</p>
         </div>
 
-        {/* Precio con texto de descuento */}
         <div className="text-2xl font-bold text-gray-900">
           {isPagoAnual && (
             <p className="text-sm justify-center text-orange-500 mb-1">
@@ -44,13 +42,12 @@ export const Card: React.FC<CardProps> = ({
             </p>
           )}
 
-          {/*Precio */}
           <div className="text-2xl font-bold text-gray-900">
             {price}
             <span className="text-sm font-normal">€</span>
           </div>
         </div>
-        {/*Checkbox */}
+
         <div className="flex items-center">
           <input
             id={title}

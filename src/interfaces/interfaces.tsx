@@ -10,9 +10,9 @@ export interface Presupuesto {
   email: string;
   precioTotal: number;
   fecha: Date;
-  [CardsEnum.Seo]: false;
-  [CardsEnum.Ads]: false;
-  [CardsEnum.Web]: false;
+  [CardsEnum.Seo]: boolean;
+  [CardsEnum.Ads]: boolean;
+  [CardsEnum.Web]: boolean;
   numeroDePaginas: number;
   numeroDeIdiomas: number;
 }

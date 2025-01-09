@@ -22,7 +22,7 @@ export const Solicitud: React.FC<Solicitud> = ({
       return;
     }
 
-    agregarPresupuesto({ ...presupuesto });
+    const nuevoPresupuesto = { ...presupuesto };
 
     // Resetear los campos del formulario
     setPresupuesto({
@@ -37,6 +37,7 @@ export const Solicitud: React.FC<Solicitud> = ({
       numeroDePaginas: 0,
       numeroDeIdiomas: 0,
     });
+    agregarPresupuesto({ ...nuevoPresupuesto });
   };
 
   return (
